@@ -40,7 +40,7 @@ def search_songs(genius, query, num_results=10):
 
 def select_with_fzf(hits):
     """Let user select a song using fzf."""
-    # Format options for fzf: "index: title - artist"
+    # Format options for fzf: "index\ttitle - artist"
     options = []
     for i, hit in enumerate(hits):
         song_info = hit["result"]
@@ -51,23 +51,26 @@ def select_with_fzf(hits):
     fzf_input = "\n".join(options)
 
     try:
-        result = subprocess.run(
-            ["fzf", "--with-nth=2..", "--delimiter=\t", 
+        # Use Popen so stderr goes to terminal (fzf needs it for UI)
+        # and fzf can read from /dev/tty for interactive input
+        process = subprocess.Popen(
+            ["fzf", "--with-nth=2..", "--delimiter=\t",
              "--height=~15", "--layout=reverse", "--border",
              "--prompt=Select song: "],
-            input=fzf_input,
-            capture_output=True,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
             text=True,
         )
+        stdout, _ = process.communicate(fzf_input)
     except FileNotFoundError:
         print("Error: fzf not found. Please install fzf or use --first flag.")
         sys.exit(1)
 
-    if result.returncode != 0:
+    if process.returncode != 0:
         # User cancelled
         return None
 
-    selected = result.stdout.strip()
+    selected = stdout.strip()
     if not selected:
         return None
 
@@ -110,7 +113,7 @@ source: "https://genius.com"
 
 def main():
     parser = argparse.ArgumentParser(description="Download song lyrics from Genius")
-    parser.add_argument("song", help="Song name to search for")
+    parser.add_argument("song", nargs="+", help="Song name to search for")
     parser.add_argument("-a", "--artist", help="Artist name (included in search query)")
     parser.add_argument("-o", "--output", default="src/content/songs",
                         help="Output directory (default: src/content/songs)")
@@ -126,7 +129,8 @@ def main():
     genius = get_genius_client()
 
     # Build search query
-    query = f"{args.song} {args.artist}" if args.artist else args.song
+    song = " ".join(args.song)
+    query = f"{song} {args.artist}" if args.artist else song
     print(f"Searching for: {query}")
 
     hits = search_songs(genius, query, args.num_results)
