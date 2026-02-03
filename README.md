@@ -1,43 +1,37 @@
-# Astro Starter Kit: Minimal
+# Bedtime Songs
 
-```sh
-pnpm create astro@latest -- --template minimal
+A simple site to hold lyrics for bedtime songs, hosted at [songs.schiller.town](https://songs.schiller.town).
+
+## Adding a Song
+
+Create a markdown file in `src/content/songs/`. The filename becomes the URL slug.
+
+```markdown
+---
+title: "Song Title"
+artist: "Artist Name"
+tags: ["lullaby", "animals"]
+---
+
+Lyrics go here...
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- `title` - Required
+- `artist` - Optional
+- `tags` - Optional, used for filtering ("Dad, can you sing a train song?")
 
-## 🚀 Project Structure
+## Features
 
-Inside of your Astro project, you'll see the following folders and files:
+- Dark mode for reading in low light
+- Instant client-side search by title and artist
+- Filter by category tags
+- Minimal styling to avoid distraction
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## Commands
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+| Command        | Action                                      |
+| :------------- | :------------------------------------------ |
+| `pnpm install` | Install dependencies                        |
+| `pnpm dev`     | Start local dev server at `localhost:4321`  |
+| `pnpm build`   | Build production site to `./dist/`          |
+| `pnpm preview` | Preview build locally before deploying      |

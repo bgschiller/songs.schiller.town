@@ -1,0 +1,141 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: #1a1a1a;
+  color: #e5e5e5;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+body {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+a {
+  color: #a5b4fc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+input[type="search"] {
+  width: 100%;
+  padding: 0.5rem;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #e5e5e5;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+input[type="search"]::placeholder {
+  color: #888;
+}
+
+input[type="search"]:focus {
+  outline: none;
+  border-color: #666;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tag {
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  color: #e5e5e5;
+}
+
+.tag:hover,
+.tag.active {
+  background: #3a3a3a;
+  border-color: #666;
+}
+
+.song-list {
+  list-style: none;
+}
+
+.song-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.song-list li:last-child {
+  border-bottom: none;
+}
+
+.song-list .artist {
+  color: #888;
+  font-size: 0.875rem;
+}
+
+.song-tags {
+  display: inline-flex;
+  gap: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+.song-tags .tag {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.375rem;
+  cursor: default;
+}
+
+.lyrics {
+  white-space: pre-wrap;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+}
+
+.song-header {
+  margin-bottom: 2rem;
+}
+
+.song-header h1 {
+  margin-bottom: 0.25rem;
+}
+
+.song-header .artist {
+  color: #888;
+  margin-bottom: 0.5rem;
+}
+
+.hidden {
+  display: none !important;
+}

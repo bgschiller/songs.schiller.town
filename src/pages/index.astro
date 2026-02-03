@@ -1,17 +1,96 @@
 ---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
 
+const songs = await getCollection('songs');
+const sortedSongs = songs.sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+// Collect all unique tags
+const allTags = [...new Set(songs.flatMap(song => song.data.tags || []))].sort();
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base title="Bedtime Songs">
+  <h1>Bedtime Songs</h1>
+  
+  <input 
+    type="search" 
+    id="search" 
+    placeholder="Search by title or artist..." 
+    autocomplete="off"
+  />
+  
+  {allTags.length > 0 && (
+    <div class="tags" id="tag-filters">
+      {allTags.map(tag => (
+        <button class="tag" data-tag={tag}>{tag}</button>
+      ))}
+    </div>
+  )}
+  
+  <ul class="song-list" id="song-list">
+    {sortedSongs.map(song => (
+      <li 
+        data-title={song.data.title.toLowerCase()} 
+        data-artist={(song.data.artist || '').toLowerCase()}
+        data-tags={(song.data.tags || []).join(',').toLowerCase()}
+      >
+        <a href={`/songs/${song.id}`}>{song.data.title}</a>
+        {song.data.artist && <span class="artist"> — {song.data.artist}</span>}
+        {song.data.tags && song.data.tags.length > 0 && (
+          <span class="song-tags">
+            {song.data.tags.map(tag => (
+              <span class="tag">{tag}</span>
+            ))}
+          </span>
+        )}
+      </li>
+    ))}
+  </ul>
+
+  <script>
+    const searchInput = document.getElementById('search') as HTMLInputElement;
+    const songList = document.getElementById('song-list')!;
+    const songs = songList.querySelectorAll('li');
+    const tagButtons = document.querySelectorAll('#tag-filters .tag');
+    
+    let activeTag: string | null = null;
+
+    function filterSongs() {
+      const query = searchInput.value.toLowerCase();
+      
+      songs.forEach(song => {
+        const title = song.dataset.title || '';
+        const artist = song.dataset.artist || '';
+        const tags = song.dataset.tags || '';
+        
+        const matchesSearch = !query || title.includes(query) || artist.includes(query);
+        const matchesTag = !activeTag || tags.split(',').includes(activeTag);
+        
+        if (matchesSearch && matchesTag) {
+          song.classList.remove('hidden');
+        } else {
+          song.classList.add('hidden');
+        }
+      });
+    }
+
+    searchInput.addEventListener('input', filterSongs);
+
+    tagButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const tag = (button as HTMLElement).dataset.tag!.toLowerCase();
+        
+        if (activeTag === tag) {
+          activeTag = null;
+          button.classList.remove('active');
+        } else {
+          tagButtons.forEach(b => b.classList.remove('active'));
+          activeTag = tag;
+          button.classList.add('active');
+        }
+        
+        filterSongs();
+      });
+    });
+  </script>
+</Base>
