@@ -1,0 +1,44 @@
+---
+title: "Fish and Whistle"
+artist: "John Prine"
+source: "https://genius.com"
+---
+
+I been thinking lately about the people I meet
+The carwash on the corner and the hole in the street
+The way my ankles hurt with shoes on my feet
+And I'm wondering if I'm gonna see tomorrow
+Father, forgive us for what we must do
+You forgive us we'll forgive you
+We'll forgive each other till we both turn blue
+Then we'll whistle and go fishing in heaven
+I was in the army, but I never dug a trench
+I used to bust my knuckles on a monkey wrench
+I'd go to town and drink and give the girls a pinch
+But I don't think they ever even noticed me
+Father, forgive us for what we must do
+You forgive us, we'll forgive you
+We'll forgive each other till we both turn blue
+Then we'll whistle and go fishing in heaven
+Fish and whistle, whistle and fish
+Eat everything that they put on your dish
+And when we get through, we'll make a big wish
+That we never have to do this again again again
+On my very first job, I said thank you and please
+They made me scrub a parking lot down on my knees
+Then I got fired for being scared of bees
+And they only give me fifty cents an hour
+Father, forgive us for what we must do
+You forgive us, we'll forgive you
+We'll forgive each other till we both turn blue
+Then we'll whistle and go fishing in heaven
+Fish and whistle, whistle and fish
+Eat everything that they put on your dish
+And when we get through, we'll make a big wish
+That we never have to do this again again again
+Father, forgive us for what we must do
+You forgive us, we'll forgive you
+We'll forgive each other till we both turn blue
+Then we'll whistle and go fishing in heaven
+We'll whistle and go fishing in heaven
+We'll whistle and go fishing in heaven
