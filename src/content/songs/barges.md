@@ -1,6 +1,6 @@
 ---
 title: "Barges"
-tags: ["boats", "camp"]
+tags: ["boat", "camp"]
 ---
 
 Out of my window, looking in the night
