@@ -52,20 +52,51 @@ const allTags = [...new Set(songs.flatMap(song => song.data.tags || []))].sort()
     const songList = document.getElementById('song-list')!;
     const songs = songList.querySelectorAll('li');
     const tagButtons = document.querySelectorAll('#tag-filters .tag');
-    
+
     let activeTag: string | null = null;
+    let pushDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+    function buildUrl(query: string, tag: string | null): string {
+      const params = new URLSearchParams();
+      if (query) params.set('q', query);
+      if (tag) params.set('tag', tag);
+      const qs = params.toString();
+      return qs ? `?${qs}` : location.pathname;
+    }
+
+    function readUrlState(): { query: string; tag: string | null } {
+      const params = new URLSearchParams(location.search);
+      return { query: params.get('q') || '', tag: params.get('tag') || null };
+    }
+
+    function applyState({ query, tag }: { query: string; tag: string | null }) {
+      searchInput.value = query;
+      activeTag = tag;
+      tagButtons.forEach(b => {
+        if (tag && (b as HTMLElement).dataset.tag!.toLowerCase() === tag) {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
+      });
+      filterSongs();
+    }
+
+    function stateObject() {
+      return { query: searchInput.value, tag: activeTag };
+    }
 
     function filterSongs() {
       const query = searchInput.value.toLowerCase();
-      
+
       songs.forEach(song => {
         const title = song.dataset.title || '';
         const artist = song.dataset.artist || '';
         const tags = song.dataset.tags || '';
-        
+
         const matchesSearch = !query || title.includes(query) || artist.includes(query);
         const matchesTag = !activeTag || tags.split(',').includes(activeTag);
-        
+
         if (matchesSearch && matchesTag) {
           song.classList.remove('hidden');
         } else {
@@ -74,12 +105,30 @@ const allTags = [...new Set(songs.flatMap(song => song.data.tags || []))].sort()
       });
     }
 
-    searchInput.addEventListener('input', filterSongs);
+    searchInput.addEventListener('input', () => {
+      filterSongs();
+      const url = buildUrl(searchInput.value, activeTag);
+
+      if (pushDebounceTimer) {
+        // Continuing to type — update the current history entry in place
+        history.replaceState(stateObject(), '', url);
+        clearTimeout(pushDebounceTimer);
+      } else {
+        // First keystroke in a burst — create a new history entry
+        history.pushState(stateObject(), '', url);
+      }
+
+      pushDebounceTimer = setTimeout(() => {
+        // Pause in typing — finalize the entry and allow next keystroke to push again
+        history.replaceState(stateObject(), '', buildUrl(searchInput.value, activeTag));
+        pushDebounceTimer = null;
+      }, 500);
+    });
 
     tagButtons.forEach(button => {
       button.addEventListener('click', () => {
         const tag = (button as HTMLElement).dataset.tag!.toLowerCase();
-        
+
         if (activeTag === tag) {
           activeTag = null;
           button.classList.remove('active');
@@ -88,9 +137,28 @@ const allTags = [...new Set(songs.flatMap(song => song.data.tags || []))].sort()
           activeTag = tag;
           button.classList.add('active');
         }
-        
+
         filterSongs();
+
+        if (pushDebounceTimer) {
+          clearTimeout(pushDebounceTimer);
+          pushDebounceTimer = null;
+        }
+        const url = buildUrl(searchInput.value, activeTag);
+        history.pushState(stateObject(), '', url);
       });
     });
+
+    window.addEventListener('popstate', (event) => {
+      const state = event.state || readUrlState();
+      applyState(state);
+    });
+
+    // Restore state from URL on page load (handles shared/bookmarked URLs)
+    const initialState = readUrlState();
+    history.replaceState(initialState, '', buildUrl(initialState.query, initialState.tag));
+    if (initialState.query || initialState.tag) {
+      applyState(initialState);
+    }
   </script>
 </Base>
